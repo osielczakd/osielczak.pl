@@ -67,6 +67,11 @@ then
 fi
 
 ORACLE_HOME=$(cat ${ORATAB} | grep "^"${ORACLE_SID}":" | cut -d":" -f2)
+if [ ! ${ORACLE_HOME} ] ; then
+    # cut last number from SID for Oracle RAC to find entry in oratab
+    ORACLE_SID=$(echo $ORACLE_SID | sed "s/[0-9]$//")
+    ORACLE_HOME=$(cat ${ORATAB} | grep "^"${ORACLE_SID}":" | cut -d":" -f2)
+fi
 
 export TNS_ADMIN=/etc/check_mk
 
